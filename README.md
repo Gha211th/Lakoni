@@ -1,3 +1,5 @@
+![Banner](./post.png)
+
 # Lakoni 🎭
 
 A lightweight, experimental application built for exploration and fun.
