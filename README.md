@@ -14,14 +14,12 @@ A lightweight, experimental application built for exploration and fun.
 * **Clean Architecture:** Built with a focus on modularity and readable code.
 * **Experimental UI:** Testing out unique design patterns and user flows.
 * **Lightweight & Fast:** Minimal overhead for a smooth experience.
-* *(Tambahkan fitur spesifik lainnya di sini)*
 
 ## 🛠️ Tech Stack
 
 * **Framework:** [Flutter](https://flutter.dev) / [Dart](https://dart.dev)
-* **State Management:** (Contoh: Bloc / Provider / Riverpod)
-* **Database:** (Contoh: Isar / Sqflite)
-* **Editor:** Neovim (NvChad)
+* **Database:** Sqflite
+* **Editor:** Visual Studio Code
 
 ## 📦 Installation
 
