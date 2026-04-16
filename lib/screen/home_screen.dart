@@ -4,6 +4,7 @@ import 'package:my_app/crud/db_model.dart';
 import 'package:my_app/font/reponsive_font.dart';
 import 'package:my_app/crud/db_helper.dart';
 import 'package:my_app/widgets/todo_form.dart';
+import 'package:my_app/widgets/todo_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,6 +27,27 @@ class _HomeScreenState extends State<HomeScreen> {
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.black,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black,
+                textStyle: const TextStyle(
+                  fontFamily: 'haas',
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null) {
@@ -132,6 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
             side: const BorderSide(color: Colors.black, width: 2),
@@ -272,69 +295,69 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCardItem(String title, String desc, String date, int id) {
-    return Container(
-      margin: const EdgeInsets.only(top: 1, bottom: 1),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.black, width: 2),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontFamily: 'haas',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  height: 1,
-                ),
-              ),
-              Text(
-                date,
-                style: TextStyle(
-                  fontFamily: 'haas',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  height: 2,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () async {
-                  int newStatus = _showCompleted ? 0 : 1;
-                  await DbHelper.instance.updateStatus(id, newStatus);
-                  _refreshTask();
-                },
-                icon: Icon(
-                  _showCompleted ? Icons.check_circle : Icons.circle_outlined,
-                  size: 32,
-                  color: Colors.black,
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.delete_outlined,
-                  size: 32,
-                  color: Colors.black,
-                ),
-                onPressed: () => _confirmDelete(id),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildCardItem(String title, String desc, String date, int id) {
+  //   return Container(
+  //     margin: const EdgeInsets.only(top: 1, bottom: 1),
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(10),
+  //       border: Border.all(color: Colors.black, width: 2),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               title,
+  //               style: TextStyle(
+  //                 fontFamily: 'haas',
+  //                 fontSize: 20,
+  //                 fontWeight: FontWeight.w500,
+  //                 height: 1,
+  //               ),
+  //             ),
+  //             Text(
+  //               date,
+  //               style: TextStyle(
+  //                 fontFamily: 'haas',
+  //                 fontSize: 12,
+  //                 fontWeight: FontWeight.w500,
+  //                 height: 2,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         Row(
+  //           children: [
+  //             IconButton(
+  //               onPressed: () async {
+  //                 int newStatus = _showCompleted ? 0 : 1;
+  //                 await DbHelper.instance.updateStatus(id, newStatus);
+  //                 _refreshTask();
+  //               },
+  //               icon: Icon(
+  //                 _showCompleted ? Icons.check_circle : Icons.circle_outlined,
+  //                 size: 32,
+  //                 color: Colors.black,
+  //               ),
+  //             ),
+  //             IconButton(
+  //               icon: Icon(
+  //                 Icons.delete_outlined,
+  //                 size: 32,
+  //                 color: Colors.black,
+  //               ),
+  //               onPressed: () => _confirmDelete(id),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildCardSession() {
     return Column(
@@ -399,7 +422,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     return InkWell(
                       onTap: () => _showTaskDetail(title, desc, date),
                       borderRadius: BorderRadius.circular(10),
-                      child: _buildCardItem(title, desc, date, id),
+                      child: TodoItem(
+                        title: title,
+                        desc: desc,
+                        date: date,
+                        id: id,
+                        showCompleted: _showCompleted,
+                        onRefresh: _refreshTask,
+                        delete: _confirmDelete,
+                      ),
                     );
                   },
                 ),
